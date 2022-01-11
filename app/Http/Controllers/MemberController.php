@@ -19,7 +19,7 @@ class MemberController extends Controller
         return view('member.index');
     }
 
-     public function data()
+    public function data()
     {
         $member = Member::orderBy('kode_member')->get();
 
@@ -80,7 +80,7 @@ class MemberController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -93,7 +93,7 @@ class MemberController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -105,12 +105,12 @@ class MemberController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-         $member = Member::find($id)->update($request->all());
+        $member = Member::find($id)->update($request->all());
 
         return response()->json('Data berhasil disimpan', 200);
     }
@@ -118,7 +118,7 @@ class MemberController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -127,5 +127,22 @@ class MemberController extends Controller
         $member->delete();
 
         return response(null, 204);
+    }
+
+    public function cetakMember(Request $request)
+    {
+        $datamember = collect(array());
+        foreach ($request->id_member as $id) {
+            $member = Member::find($id);
+            $datamember[] = $member;
+        }
+
+        $datamember = $datamember->chunk(2);
+        $setting    = Setting::first();
+
+        $no  = 1;
+        $pdf = PDF::loadView('member.cetak', compact('datamember', 'no', 'setting'));
+        $pdf->setPaper(array(0, 0, 566.93, 850.39), 'potrait');
+        return $pdf->stream('member.pdf');
     }
 }

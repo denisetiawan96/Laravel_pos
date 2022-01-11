@@ -7,11 +7,6 @@ use App\Models\Supplier;
 
 class SupplierController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         return view('supplier.index');
@@ -109,5 +104,4 @@ class SupplierController extends Controller
 
         return response(null, 204);
     }
-    
 }
