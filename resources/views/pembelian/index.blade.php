@@ -44,9 +44,15 @@
 @push('scripts')
 <script>
     let table, table1;
-    $(function () {
+     $(function () {
         table = $('.table-pembelian').DataTable({
-            
+            responsive: true,
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            ajax: {
+                url: '{{ route('pembelian.data') }}',
+            },
             columns: [
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
                 {data: 'tanggal'},

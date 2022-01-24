@@ -16,7 +16,7 @@ class PembelianDetailController extends Controller
         $produk = Produk::orderBy('nama_produk')->get();
         $supplier = Supplier::find(session('id_supplier'));
       
-
+        
         if (! $supplier) {
             abort(404);
         }
@@ -25,7 +25,7 @@ class PembelianDetailController extends Controller
     }
 
     public function data($id)
-    {
+        {
         $detail = PembelianDetail::with('produk')
             ->where('id_pembelian', $id)
             ->get();
@@ -112,4 +112,5 @@ class PembelianDetailController extends Controller
 
         return response()->json($data);
     }
+
 }

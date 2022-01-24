@@ -109,7 +109,7 @@
                             <div class="form-group row">
                                 <label for="diskon" class="col-lg-2 control-label">Diskon</label>
                                 <div class="col-lg-8">
-                                    <input type="number" name="diskon" id="diskon" class="form-control" value="{{ $diskon }}">
+                                    <input type="number" name="diskon" id="diskon" class="form-control" value="0">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -138,12 +138,11 @@
     let table, table2;
 
     $(function () {
-        $('body').addClass('sidebar-collapse');
 
         table = $('.table-pembelian').DataTable({
-            responsive: true,
+            
             processing: true,
-            serverSide: true,
+            
             autoWidth: false,
             ajax: {
                 url: '{{ route('pembelian_detail.data', $id_pembelian) }}',
@@ -159,11 +158,10 @@
             ],
             dom: 'Brt',
             bSort: false,
-            paginate: false
         })
         .on('draw.dt', function () {
             loadForm($('#diskon').val());
-        });
+        });  
         table2 = $('.table-produk').DataTable();
 
         $(document).on('input', '.quantity', function () {
@@ -171,42 +169,42 @@
             let jumlah = parseInt($(this).val());
 
             if (jumlah < 1) {
+                alert('jumlah tidak boleh kurang dari 1');
                 $(this).val(1);
-                alert('Jumlah tidak boleh kurang dari 1');
-                return;
-            }
-            if (jumlah > 10000) {
-                $(this).val(10000);
-                alert('Jumlah tidak boleh lebih dari 10000');
                 return;
             }
 
+            if (jumlah > 10000) {
+                alert('jumlah tidak boleh lebih dari 10000');
+                $(this).val(10000);
+                return;
+            }
+            
             $.post(`{{ url('/pembelian_detail') }}/${id}`, {
-                    '_token': $('[name=csrf-token]').attr('content'),
+                '_token': $('[name=csrf-token]').attr('content'),
                     '_method': 'put',
-                    'jumlah': jumlah
-                })
-                .done(response => {
-                    $(this).on('mouseout', function () {
-                        table.ajax.reload(() => loadForm($('#diskon').val()));
-                    });
-                })
-                .fail(errors => {
-                    alert('Tidak dapat menyimpan data');
-                    return;
+                     'jumlah': jumlah
+            })
+            .done(response => {
+                $(this).on('mouseout', function () {
+                    table.ajax.reload();
                 });
-        });
+            })
+            .fail(errors => {
+                alert('Tidak dapat menyimpan data');
+                return;
+            });
+        });  
 
         $(document).on('input', '#diskon', function () {
             if ($(this).val() == "") {
                 $(this).val(0).select();
             }
-
             loadForm($(this).val());
         });
-
         $('.btn-simpan').on('click', function () {
             $('.form-pembelian').submit();
+             table.ajax.reload();
         });
     });
 
@@ -229,7 +227,7 @@
         $.post('{{ route('pembelian_detail.store') }}', $('.form-produk').serialize())
             .done(response => {
                 $('#kode_produk').focus();
-                table.ajax.reload(() => loadForm($('#diskon').val()));
+                table.ajax.reload();
             })
             .fail(errors => {
                 alert('Tidak dapat menyimpan data');
@@ -244,7 +242,7 @@
                     '_method': 'delete'
                 })
                 .done((response) => {
-                    table.ajax.reload(() => loadForm($('#diskon').val()));
+                    table.ajax.reload();
                 })
                 .fail((errors) => {
                     alert('Tidak dapat menghapus data');
@@ -256,7 +254,6 @@
     function loadForm(diskon = 0) {
         $('#total').val($('.total').text());
         $('#total_item').val($('.total_item').text());
-
         $.get(`{{ url('/pembelian_detail/loadform') }}/${diskon}/${$('.total').text()}`)
             .done(response => {
                 $('#totalrp').val('Rp. '+ response.totalrp);
@@ -270,5 +267,7 @@
                 return;
             })
     }
+
+    
 </script>
 @endpush

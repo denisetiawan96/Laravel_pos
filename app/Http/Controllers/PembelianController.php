@@ -80,6 +80,7 @@ class PembelianController extends Controller
         $pembelian->update();
 
         $detail = PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)->get();
+        
         foreach ($detail as $item) {
             $produk = Produk::find($item->id_produk);
             $produk->stok += $item->jumlah;
