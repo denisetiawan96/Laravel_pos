@@ -25,12 +25,17 @@ class ProdukController extends Controller
     {
         $produk = Produk::leftJoin('kategori', 'kategori.id_kategori', 'produk.id_kategori')
             ->select('produk.*', 'nama_kategori')
-            ->orderBy('id_produk', 'desc')
+            ->orderBy('id_produk', 'asc')
             ->get();
 
         return datatables()
             ->of($produk)
             ->addIndexColumn()
+            ->addColumn('select_all', function ($produk) {
+                return '
+                    <input type="checkbox" name="id_produk[]" value="'. $produk->id_produk .'">
+                ';
+            })
             ->addColumn('aksi', function ($produk) {
                 
                 return '
@@ -40,7 +45,7 @@ class ProdukController extends Controller
                 </div>
                 ';
             })
-            ->rawColumns(['aksi'])
+            ->rawColumns(['aksi', 'select_all'])
             ->make(true);
     }
 
@@ -141,7 +146,7 @@ class ProdukController extends Controller
             $dataproduk[] = $produk;
         }
 
-        $no  = 1;
+        $no  = 1;  
         $pdf = PDF::loadView('produk.barcode', compact('dataproduk', 'no'));
         $pdf->setPaper('a4', 'potrait');
         return $pdf->stream('produk.pdf');

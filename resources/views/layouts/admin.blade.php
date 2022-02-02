@@ -29,7 +29,41 @@
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
   @stack('css')
+  <style>
+   .pagination > li > a
+{
+    background-color: white;
+    color: red;
+}
+
+.pagination > li > a:focus,
+.pagination > li > a:hover,
+.pagination > li > span:focus,
+.pagination > li > span:hover
+{
+    color: red;
+    background-color: #eee;
+    border-color: #ddd;
+}
+
+.pagination > .active > a
+{
+    color: white;
+    background-color: red;
+    border: solid 1px red;
+}
+
+.pagination > .active > a:hover
+{
+    background-color: red;
+    border: solid 1px red;
+}
+</style>
 </head>
+
+@push('css')
+
+@endpush
 <body class="hold-transition skin-red-light sidebar-mini">
 <div class="wrapper">
   @includeIf('layouts.header')

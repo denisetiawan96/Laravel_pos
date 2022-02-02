@@ -25,7 +25,9 @@
                     @csrf
                     <table class="table table-stiped table-bordered">
                         <thead>
-                            
+                            <th width="5%">
+                                <input type="checkbox" name="select_all" id="select_all">
+                            </th>
                             <th width="5%">No</th>
                             <th>Kode</th>
                             <th>Nama</th>
@@ -50,7 +52,6 @@
 @push('scripts')
 <script>
     let table;
-
     $(function () {
         table = $('.table').DataTable({
             responsive: true,
@@ -61,7 +62,7 @@
                 url: '{{ route('produk.data') }}',
             },
             columns: [
-                
+                {data: 'select_all', searchable: false, sortable: false},
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
                 {data: 'kode_produk'},
                 {data: 'nama_produk'},
@@ -74,7 +75,6 @@
                 {data: 'aksi', searchable: false, sortable: false},
             ]
         });
-
         $('#modal-form').validator().on('submit', function (e) {
             if (! e.preventDefault()) {
                 $.post($('#modal-form form').attr('action'), $('#modal-form form').serialize())
@@ -88,31 +88,25 @@
                     });
             }
         });
-
         $('[name=select_all]').on('click', function () {
             $(':checkbox').prop('checked', this.checked);
         });
     });
-
     function addForm(url) {
         $('#modal-form').modal('show');
         $('#modal-form .modal-title').text('Tambah Produk');
-
         $('#modal-form form')[0].reset();
         $('#modal-form form').attr('action', url);
         $('#modal-form [name=_method]').val('post');
         $('#modal-form [name=nama_produk]').focus();
     }
-
     function editForm(url) {
         $('#modal-form').modal('show');
         $('#modal-form .modal-title').text('Edit Produk');
-
         $('#modal-form form')[0].reset();
         $('#modal-form form').attr('action', url);
         $('#modal-form [name=_method]').val('put');
         $('#modal-form [name=nama_produk]').focus();
-
         $.get(url)
             .done((response) => {
                 $('#modal-form [name=nama_produk]').val(response.nama_produk);
@@ -128,7 +122,6 @@
                 return;
             });
     }
-
     function deleteData(url) {
         if (confirm('Yakin ingin menghapus data terpilih?')) {
             $.post(url, {
@@ -144,7 +137,6 @@
                 });
         }
     }
-
     function deleteSelected(url) {
         if ($('input:checked').length > 1) {
             if (confirm('Yakin ingin menghapus data terpilih?')) {
@@ -162,7 +154,6 @@
             return;
         }
     }
-
     function cetakBarcode(url) {
         if ($('input:checked').length < 1) {
             alert('Pilih data yang akan dicetak');
