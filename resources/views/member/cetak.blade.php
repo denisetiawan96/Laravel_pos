@@ -20,7 +20,7 @@
             font-size: 16pt;
             font-family: Arial, Helvetica, sans-serif;
             font-weight: bold;
-            color: #fff !important;
+            color: #000000 !important;
         }
         .logo p {
             text-align: right;
@@ -50,7 +50,7 @@
         }
         .barcode {
             position: absolute;
-            top: 105pt;
+            top: 100pt;
             left: .860rem;
             border: 1px solid #fff;
             padding: .5px;
@@ -75,10 +75,10 @@
                     @foreach ($data as $item)
                         <td class="text-center">
                             <div class="box">
-                                <img src="{{ public_path($setting->path_kartu_member) }}" alt="card" width="50%">
+                                <img src="{{ asset($setting->path_kartu_member)}}" alt="card" width="50%">
                                 <div class="logo">
                                     <p>{{ $setting->nama_perusahaan }}</p>
-                                    <img src="{{ public_path($setting->path_logo) }}" alt="logo">
+                                    <img src="{{ asset($setting->path_logo)}}" alt="logo">
                                 </div>
                                 <div class="nama">{{ $item->nama }}</div>
                                 <div class="telepon">{{ $item->telepon }}</div>
@@ -88,11 +88,7 @@
                                         widht="45">
                                 </div>
                             </div>
-                        </td>
-                        
-                        @if (count($datamember) == 1)
-                        <td class="text-center" style="width: 50%;"></td>
-                        @endif
+                        </td>    
                     @endforeach
                 </tr>
             @endforeach
