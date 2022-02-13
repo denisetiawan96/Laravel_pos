@@ -6,6 +6,7 @@ use App\Models\Penjualan;
 use App\Models\PenjualanDetail;
 use App\Models\Produk;
 use App\Models\Setting;
+use App\Models\Member;
 use Illuminate\Http\Request;
 use PDF;
 
@@ -41,9 +42,6 @@ class PenjualanController extends Controller
             })
             ->editColumn('diskon', function ($penjualan) {
                 return $penjualan->diskon . '%';
-            })
-            ->editColumn('kasir', function ($penjualan) {
-                return $penjualan->user->name ?? '';
             })
             ->addColumn('aksi', function ($penjualan) {
                 return '

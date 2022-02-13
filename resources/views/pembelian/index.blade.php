@@ -45,6 +45,7 @@
 <script>
     let table, table1;
      $(function () {
+        
         table = $('.table-pembelian').DataTable({
             responsive: true,
             processing: true,

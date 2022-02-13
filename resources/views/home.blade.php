@@ -5,5 +5,5 @@ Dashboard
 @endsection
 
 @section('content')
-ini adalah halaman dashboard
+halaman dashboard
 @endsection
